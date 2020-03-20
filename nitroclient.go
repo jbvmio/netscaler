@@ -64,6 +64,6 @@ func (c *NitroClient) makeURL(nitroType NitroType) string {
 	case ConfigType:
 		return c.url + "config/" + nitroType.String()
 	default:
-		return ""
+		return nitroType.String()
 	}
 }
