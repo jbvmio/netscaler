@@ -47,12 +47,12 @@ func NewNitroClient(url string, username string, password string, ignoreCert boo
 }
 
 // Connect initiates a connection NetScaler with the NitroClient.
-func (c *NitroClient) Connect(configType string, querystring string) error {
+func (c *NitroClient) Connect() error {
 	return Connect(c)
 }
 
 // Disconnect logs the NitroClient out of NetScaler.
-func (c *NitroClient) Disconnect(configType string, querystring string) error {
+func (c *NitroClient) Disconnect() error {
 	return Disconnect(c)
 }
 
