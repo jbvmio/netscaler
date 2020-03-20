@@ -45,3 +45,25 @@ func NewNitroClient(url string, username string, password string, ignoreCert boo
 		},
 	}, nil
 }
+
+// Connect initiates a connection NetScaler with the NitroClient.
+func (c *NitroClient) Connect(configType string, querystring string) error {
+	return Connect(c)
+}
+
+// Disconnect logs the NitroClient out of NetScaler.
+func (c *NitroClient) Disconnect(configType string, querystring string) error {
+	return Disconnect(c)
+}
+
+// makeURL constructs a URL based on the given NitroType.
+func (c *NitroClient) makeURL(nitroType NitroType) string {
+	switch nitroType.(type) {
+	case StatsType:
+		return c.url + "stat/" + nitroType.String()
+	case ConfigType:
+		return c.url + "config/" + nitroType.String()
+	default:
+		return ""
+	}
+}

@@ -12,12 +12,14 @@ const (
 	ConfigTypeLicense
 	ConfigTypeServiceGroup
 	ConfigTypeLBVSBinding
+	ConfigTypeLBVSSvcBinding
 )
 
 var configTypeStrings = [...]string{
-	`ConfigNone`,
+	`configNone`,
 	`nslicense`,
 	`servicegroup`,
+	`lbvserver_binding`,
 	`lbvserver_service_binding`,
 }
 
@@ -36,9 +38,16 @@ const (
 )
 
 var statsTypeStrings = [...]string{
-	`StatsNone`,
+	`statsNone`,
 	`ns`,
 	`interface`,
+	`lbvserver`,
+	`service`,
+	`servicegroup`,
+	`gslbservice`,
+	`gslbvserver`,
+	`csvserver`,
+	`vpnvserver`,
 }
 
 func (t ConfigType) String() string {
@@ -47,4 +56,9 @@ func (t ConfigType) String() string {
 
 func (t StatsType) String() string {
 	return statsTypeStrings[t]
+}
+
+// NitroType represents either a StatsType or ConfigType.
+type NitroType interface {
+	String() string
 }
