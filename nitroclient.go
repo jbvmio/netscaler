@@ -31,7 +31,7 @@ func NewNitroClient(url string, username string, password string, ignoreCert boo
 		password: password,
 		url:      strings.Trim(url, " /") + "/nitro/v1/",
 		client: &http.Client{
-			Timeout: 60 * time.Second,
+			Timeout: 120 * time.Second,
 			Jar:     jar,
 			Transport: &http.Transport{
 				MaxIdleConns:        200,
