@@ -31,7 +31,7 @@ func NewNitroClient(url string, username string, password string, ignoreCert boo
 		password: password,
 		url:      strings.Trim(url, " /") + "/nitro/v1/",
 		client: &http.Client{
-			Timeout: 120 * time.Second,
+			Timeout: 60 * time.Second,
 			Jar:     jar,
 			Transport: &http.Transport{
 				MaxIdleConns:        200,
@@ -44,6 +44,16 @@ func NewNitroClient(url string, username string, password string, ignoreCert boo
 			},
 		},
 	}, nil
+}
+
+// WithHTTPTimeout sets the HTTP timeout for the underlying http client, use before connecting.
+func (c *NitroClient) WithHTTPTimeout(t time.Duration) {
+	c.client.Timeout = t
+}
+
+// WithHTTPClient replaces the underlying HTTP client, use before connecting.
+func (c *NitroClient) WithHTTPClient(client *http.Client) {
+	c.client = client
 }
 
 // Connect initiates a connection NetScaler with the NitroClient.
