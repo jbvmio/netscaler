@@ -35,6 +35,7 @@ const (
 	StatsTypeGSLBVServer
 	StatsTypeCSVServer
 	StatsTypeVPNVServer
+	StatsTypeSSL
 )
 
 var statsTypeStrings = [...]string{
@@ -48,6 +49,7 @@ var statsTypeStrings = [...]string{
 	`gslbvserver`,
 	`csvserver`,
 	`vpnvserver`,
+	`ssl`,
 }
 
 func (t ConfigType) String() string {
