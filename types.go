@@ -10,6 +10,7 @@ type StatsType int
 const (
 	ConfigTypeNone ConfigType = iota
 	ConfigTypeLicense
+	ConfigTypeNSVersion
 	ConfigTypeServiceGroup
 	ConfigTypeLBVSBinding
 	ConfigTypeLBVSSvcBinding
@@ -18,6 +19,7 @@ const (
 var configTypeStrings = [...]string{
 	`configNone`,
 	`nslicense`,
+	`nsversion`,
 	`servicegroup`,
 	`lbvserver_binding`,
 	`lbvserver_service_binding`,
