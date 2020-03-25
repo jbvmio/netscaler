@@ -10,6 +10,7 @@ type StatsType int
 const (
 	ConfigTypeNone ConfigType = iota
 	ConfigTypeLicense
+	ConfigTypeNSVersion
 	ConfigTypeServiceGroup
 	ConfigTypeLBVSBinding
 	ConfigTypeLBVSSvcBinding
