@@ -17,13 +17,10 @@ func GetNSVersion(c *NitroClient, querystring string) (NSAPIResponse, error) {
 	if err != nil {
 		return NSAPIResponse{}, err
 	}
-
-	var response = new(NSAPIResponse)
-
+	var response NSAPIResponse
 	err = json.Unmarshal(cfg, &response)
 	if err != nil {
 		return NSAPIResponse{}, errors.Wrap(err, "error unmarshalling response body")
 	}
-
-	return *response, nil
+	return response, nil
 }
