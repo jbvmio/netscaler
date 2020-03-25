@@ -6,6 +6,7 @@ type NSAPIResponse struct {
 	Message                  string                    `json:"message"`
 	Severity                 string                    `json:"severity"`
 	NSLicense                NSLicense                 `json:"nslicense"`
+	NSVersion                NSVersion                 `json:"nsversion"`
 	NSStats                  NSStats                   `json:"ns"`
 	InterfaceStats           []InterfaceStats          `json:"Interface"`
 	VirtualServerStats       []VirtualServerStats      `json:"lbvserver"`
