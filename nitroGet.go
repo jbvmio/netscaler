@@ -14,10 +14,16 @@ func (c *NitroClient) GetAll(nitroType NitroType) ([]byte, error) {
 	switch nitroType {
 	case ConfigTypeLBVSBinding, ConfigTypeLBVSSvcBinding:
 		url += `?bulkbindings=yes`
+	case StatsTypeLBVServerWithStatBindings:
+		url += `?statbindings=yes`
 	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "error creating HTTP request")
+	}
+	if !c.useSession {
+		req.Header.Set("X-NITRO-USER", c.username)
+		req.Header.Set("X-NITRO-PASS", c.password)
 	}
 	req.Header.Set("Accept", "application/json")
 	resp, err := c.client.Do(req)
@@ -46,9 +52,17 @@ func (c *NitroClient) GetAll(nitroType NitroType) ([]byte, error) {
 // Get sends a request to the Nitro API and retrieves stats for the given type.
 func (c *NitroClient) Get(nitroType NitroType, target string) ([]byte, error) {
 	url := c.makeURL(nitroType) + `/` + target
+	switch nitroType {
+	case StatsTypeLBVServerWithStatBindings:
+		url += `?statbindings=yes`
+	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "error creating HTTP request")
+	}
+	if !c.useSession {
+		req.Header.Set("X-NITRO-USER", c.username)
+		req.Header.Set("X-NITRO-PASS", c.password)
 	}
 	req.Header.Set("Accept", "application/json")
 	resp, err := c.client.Do(req)

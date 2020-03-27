@@ -12,26 +12,28 @@ import (
 
 // NitroClient represents the client used to connect to the API
 type NitroClient struct {
-	url      string
-	username string
-	password string
-	client   *http.Client
+	url        string
+	username   string
+	password   string
+	useSession bool
+	client     *http.Client
 }
 
-// NewNitroClient creates a new client used to interact with the Nitro API.
+// NewSessionClient creates a new NitroClient that uses a logged in session to interact with the Nitro API.
 // URL, username and password are passed to this function to allow connections to any NetScaler endpoint.
 // The ignoreCert parameter allows self-signed certificates to be accepted.  It should be used sparingly and only when you fully trust the endpoint.
-func NewNitroClient(url string, username string, password string, ignoreCert bool) (*NitroClient, error) {
+func NewSessionClient(url string, username string, password string, ignoreCert bool) (*NitroClient, error) {
 	jar, err := cookiejar.New(nil)
 	if err != nil {
 		return &NitroClient{}, errors.Wrap(err, "error creating cookiejar")
 	}
 	return &NitroClient{
-		username: username,
-		password: password,
-		url:      strings.Trim(url, " /") + "/nitro/v1/",
+		username:   username,
+		password:   password,
+		url:        strings.Trim(url, " /") + "/nitro/v1/",
+		useSession: true,
 		client: &http.Client{
-			Timeout: 60 * time.Second,
+			Timeout: 30 * time.Second,
 			Jar:     jar,
 			Transport: &http.Transport{
 				MaxIdleConns:        200,
@@ -46,6 +48,25 @@ func NewNitroClient(url string, username string, password string, ignoreCert boo
 	}, nil
 }
 
+// NewClient creates a new NitroClient that uses individual operation calls, instead of a logged in session, to interact with the Nitro API.
+// URL, username and password are passed to this function to allow connections to any NetScaler endpoint.
+// The ignoreCert parameter allows self-signed certificates to be accepted.  It should be used sparingly and only when you fully trust the endpoint.
+func NewClient(url string, username string, password string, ignoreCert bool) *NitroClient {
+	return &NitroClient{
+		username: username,
+		password: password,
+		url:      strings.Trim(url, " /") + "/nitro/v1/",
+		client: &http.Client{
+			Timeout: 60 * time.Second,
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{
+					InsecureSkipVerify: ignoreCert,
+				},
+			},
+		},
+	}
+}
+
 // WithHTTPTimeout sets the HTTP timeout for the underlying http client, use before connecting.
 func (c *NitroClient) WithHTTPTimeout(t time.Duration) {
 	c.client.Timeout = t
@@ -58,22 +79,16 @@ func (c *NitroClient) WithHTTPClient(client *http.Client) {
 
 // Connect initiates a connection NetScaler with the NitroClient.
 func (c *NitroClient) Connect() error {
+	if !c.useSession {
+		return nil
+	}
 	return Connect(c)
 }
 
 // Disconnect logs the NitroClient out of NetScaler.
 func (c *NitroClient) Disconnect() error {
-	return Disconnect(c)
-}
-
-// makeURL constructs a URL based on the given NitroType.
-func (c *NitroClient) makeURL(nitroType NitroType) string {
-	switch nitroType.(type) {
-	case StatsType:
-		return c.url + "stat/" + nitroType.String()
-	case ConfigType:
-		return c.url + "config/" + nitroType.String()
-	default:
-		return nitroType.String()
+	if !c.useSession {
+		return nil
 	}
+	return Disconnect(c)
 }

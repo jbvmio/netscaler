@@ -31,6 +31,7 @@ const (
 	StatsTypeNS
 	StatsTypeInterface
 	StatsTypeLBVServer
+	StatsTypeLBVServerWithStatBindings
 	StatsTypeService
 	StatsTypeServiceGroupMember
 	StatsTypeGSLBService
@@ -44,6 +45,7 @@ var statsTypeStrings = [...]string{
 	`statsNone`,
 	`ns`,
 	`interface`,
+	`lbvserver`,
 	`lbvserver`,
 	`service`,
 	`servicegroup`,
@@ -65,4 +67,16 @@ func (t StatsType) String() string {
 // NitroType represents either a StatsType or ConfigType.
 type NitroType interface {
 	String() string
+}
+
+// makeURL constructs a URL based on the given NitroType.
+func (c *NitroClient) makeURL(nitroType NitroType) string {
+	switch nitroType.(type) {
+	case StatsType:
+		return c.url + "stat/" + nitroType.String()
+	case ConfigType:
+		return c.url + "config/" + nitroType.String()
+	default:
+		return nitroType.String()
+	}
 }

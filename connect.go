@@ -51,7 +51,11 @@ func Connect(c *NitroClient) error {
 		if err != nil {
 			return errors.Wrap(err, "error reading response body")
 		}
-		var response NSAPIResponse
+		response := struct {
+			Errorcode int64  `json:"errorcode"`
+			Message   string `json:"message"`
+			Severity  string `json:"severity"`
+		}{}
 		err = json.Unmarshal(body, &response)
 		if err != nil {
 			return errors.Wrap(err, "error unmarshalling response body")
