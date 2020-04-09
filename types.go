@@ -14,6 +14,7 @@ const (
 	ConfigTypeServiceGroup
 	ConfigTypeLBVSBinding
 	ConfigTypeLBVSSvcBinding
+	ConfigTypeNSHardware
 )
 
 var configTypeStrings = [...]string{
@@ -23,6 +24,7 @@ var configTypeStrings = [...]string{
 	`servicegroup`,
 	`lbvserver_binding`,
 	`lbvserver_service_binding`,
+	`nshardware`,
 }
 
 // StatsType code list:
