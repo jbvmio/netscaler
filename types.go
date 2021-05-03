@@ -12,6 +12,7 @@ const (
 	ConfigTypeLicense
 	ConfigTypeNSVersion
 	ConfigTypeService
+	ConfigTypeServer
 	ConfigTypeLBVServer
 	ConfigTypeServiceGroup
 	ConfigTypeLBVSBinding
@@ -24,6 +25,7 @@ var configTypeStrings = [...]string{
 	`nslicense`,
 	`nsversion`,
 	`service`,
+	`server`,
 	`lbvserver`,
 	`servicegroup`,
 	`lbvserver_binding`,
